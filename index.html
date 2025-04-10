@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Toplantı Kayıtları</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 0;
+      background-color: #f8f8f8;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Toplantı Kayıtları</h2>
+    
+    <!-- Anahtar sahibini seçmek için dropdown menü -->
+    <label for="person">Anahtar Sahibi:</label>
+    <select id="person">
+      <option value="Şahan">Şahan</option>
+      <option value="Caner">Caner</option>
+      <option value="Ulaş">Ulaş</option>
+      <option value="Ömer">Ömer</option>
+      <option value="Ceren">Ceren</option>
+      <option value="Derin">Derin</option>
+      <option value="İrem">İrem</option>
+      <option value="Mert">Mert</option>
+      <option value="Sena">Sena</option>
+      <option value="Tolunay">Tolunay</option>
+      <option value="Ahmet">Ahmet</option>
+      <option value="Emre">Emre</option>
+      <option value="Eylül">Eylül</option>
+      <option value="Reşat">Reşat</option>
+      <option value="Talya">Talya</option>
+      <option value="Yaren">Yaren</option>
+    </select>
+    
+    <br><br>
+
+    <!-- Butonlar -->
+    <button onclick="yeniKayit('açtı')">Odayı Açtım</button>
+    <button onclick="yeniKayit('kapattı')">Odayı Kapattım</button>
+
+    <!-- Kayıtlar tablosu -->
+    <table id="kayitlarTablosu">
+      <thead>
+        <tr>
+          <th>Anahtar Sahibi</th>
+          <th>İşlem</th>
+          <th>Tarih ve Saat</th>
+        </tr>
+      </thead>
+      <tbody id="kayıtlar">
+        <!-- Kayıtlar burada listelenecek -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // LocalStorage'den kayıtları yükle
+    function yükleKayitlar() {
+      let kayitlar = JSON.parse(localStorage.getItem("kayitlar")) || [];
+      const tbody = document.getElementById("kayıtlar");
+      tbody.innerHTML = ''; // Tabloyu temizle
+
+      kayitlar.forEach(kayit => {
+        let tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${kayit.kisi}</td>
+          <td>${kayit.islem}</td>
+          <td>${kayit.tarih}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Yeni kayıt ekleme fonksiyonu
+    function yeniKayit(islem) {
+      const kisi = document.getElementById("person").value;  // Dropdown'dan seçilen kişi
+      const tarih = new Date().toLocaleString();  // O anki tarih ve saat
+
+      let kayitlar = JSON.parse(localStorage.getItem("kayitlar")) || [];
+      kayitlar.push({ kisi, islem, tarih });
+
+      localStorage.setItem("kayitlar", JSON.stringify(kayitlar));
+      yükleKayitlar();  // Kayıtları tekrar yükle
+    }
+
+    // Sayfa yüklendiğinde kayıtları yükle
+    window.onload = function() {
+      yükleKayitlar();
+    };
+  </script>
+
+</body>
+</html>
